@@ -4,7 +4,6 @@ namespace App\Http\Controllers\AdminAuth;
 
 use App\Admin;
 use Validator;
-use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -45,8 +44,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        auth()->logout();
-        Session::flush();
+        auth()->guard('admin')->logout();
+        session()->forget('key');
         return redirect('/admin/login');
     }
 
