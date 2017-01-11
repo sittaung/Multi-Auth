@@ -19,14 +19,15 @@ Route::auth();
 Route::get('/home', 'HomeController@index');
 Route::resource('user', 'UserController');
 
-Route::group(['middleware' => 'admin'], function() {
-	Route::get('admin', 'AdminController@index');
-	Route::get('/admin/dashboard', 'AdminController@index');
-	Route::get('/admin/user', 'UserController@index');
+Route::group(['prefix' => 'admin'], function ()
+{
+	Route::get('/', 'AdminController@index');
+	Route::get('/dashboard', 'AdminController@index');
+	Route::get('/user', 'UserController@index');
+	Route::get('/login','AdminAuth\AuthController@showLoginForm');
+	Route::post('/login','AdminAuth\AuthController@postLogin');
+	Route::get('/logout','AdminAuth\AuthController@logout');
 });
-Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
-Route::post('/admin/login','AdminAuth\AuthController@login');
-Route::get('/admin/logout','AdminAuth\AuthController@logout');
 
 
 

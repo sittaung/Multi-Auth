@@ -4,6 +4,8 @@ namespace App\Http\Controllers\AdminAuth;
 
 use App\Admin;
 use Validator;
+use Illuminate\Http\Request;
+use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -40,6 +42,21 @@ class AuthController extends Controller
         }
 
         return view('admin.auth.login');
+    }
+
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email', 'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
+            return redirect()->to('admin/dashboard');
+        }
+
+        return $this->sendFailedLoginResponse($request);
     }
 
     public function logout()
